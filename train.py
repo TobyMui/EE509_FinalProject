@@ -47,7 +47,9 @@ def evaluate(model, loader, device):
 
 
 def build_optimizer(model, model_name, backbone_lr, head_lr, weight_decay):
-    if model_name == "efficientnet":
+    """Pretrained backbones (EfficientNet B0 / V2-S) get discriminative LRs;
+    SimpleCNN trains all params at head_lr since nothing is pretrained."""
+    if model_name in ("efficientnet", "efficientnetv2"):
         bb, hd = [], []
         for n, p in model.named_parameters():
             (hd if n.startswith("backbone.classifier") else bb).append(p)
@@ -70,7 +72,8 @@ def print_class_distribution(name, split):
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--model", default="efficientnet", choices=["efficientnet", "simplecnn"])
+    p.add_argument("--model", default="efficientnet",
+                   choices=["efficientnet", "efficientnetv2", "simplecnn"])
     p.add_argument("--epochs", type=int, default=20)
     p.add_argument("--batch-size", type=int, default=32)
     p.add_argument("--backbone-lr", type=float, default=1e-4)

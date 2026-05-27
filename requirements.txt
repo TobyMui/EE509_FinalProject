@@ -3,3 +3,9 @@ torchvision>=0.16
 datasets>=2.14
 Pillow>=10.0
 numpy
+
+
+# # Train all three (on your 5070 Ti, run sequentially)
+#python train.py --model simplecnn      --epochs 20
+#python train.py --model efficientnet   --epochs 20 --batch-size 96 --bf16
+#python train.py --model efficientnetv2 --epochs 20 --batch-size 64 --bf16
